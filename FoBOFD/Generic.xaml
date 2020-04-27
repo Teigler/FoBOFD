@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:FoBOFD"
+                    
+                    
+                    xmlns:directoryDialogVMs="clr-namespace:FoBOFD.PresentationLogic.Dialog.FileSystem.Directory;assembly=FoBOFD.PresentationLogic"
+                    xmlns:directoryDialogVs="clr-namespace:FoBOFD.Dialog.FileSystem.Directory"
+                    
+                    xmlns:directoryFileDialogVMs="clr-namespace:FoBOFD.PresentationLogic.Dialog.FileSystem.DirectoryFile;assembly=FoBOFD.PresentationLogic"
+                    xmlns:directoryFileDialogVs="clr-namespace:FoBOFD.Dialog.FileSystem.DirectoryFile"
+                    
+                    xmlns:fileDialogVMs="clr-namespace:FoBOFD.PresentationLogic.Dialog.FileSystem.File;assembly=FoBOFD.PresentationLogic"
+                    xmlns:fileDialogVs="clr-namespace:FoBOFD.Dialog.FileSystem.File"
+                    
+                    xmlns:dialogOperationVMs="clr-namespace:FoBOFD.PresentationLogic.Dialog.Operation;assembly=FoBOFD.PresentationLogic"
+                    xmlns:dialogOperationVs="clr-namespace:FoBOFD.Dialog.Operation"
+                    >
+
+
+    <DataTemplate DataType="{x:Type directoryDialogVMs:DirectoryDialogViewModel }">
+        <directoryDialogVs:DirectoryDialogView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type directoryFileDialogVMs:DirectoryFileDialogViewModel }">
+        <directoryFileDialogVs:DirectoryFileDialogView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type fileDialogVMs:FileDialogViewModel }">
+        <fileDialogVs:FileDialogView />
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type dialogOperationVMs:DefaultDialogOperationViewModel }">
+        <dialogOperationVs:DefaultDialogOperationView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dialogOperationVMs:DirectoryDialogOperationPanelViewModel }">
+        <dialogOperationVs:DirectoryDialogOperationPanelView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dialogOperationVMs:DirectoryFileDialogOperationPanelViewModel }">
+        <dialogOperationVs:DirectoryFileDialogOperationPanelView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type dialogOperationVMs:FileDialogOperationPanelViewModel }">
+        <dialogOperationVs:FileDialogOperationPanelView />
+    </DataTemplate>
+    
+   
+
+</ResourceDictionary>
