@@ -11,14 +11,6 @@ FoBOFD means: FolderBrowser-OpenFile-Dialog
 * Therefore the core component of FoBOFD is the ExplorerTree Component (ETC).
 
 
-##The ExplorerTree Component (ETC)
-
-The ETC is implemented in the ExplorerTree.dll.  
-It is also possible to include only the ExplorerTree-Component in a project,  
-to create your own dialogs to load files and folders.  
-For this purpose this component provides an Application-Programming-Interface (API).  
-The API allows an dynamic configuration of the explorer tree during runtime.  
-For example the icon and text size can be configured. 
 
 ## Personal Goals 
 
@@ -40,6 +32,17 @@ Thus the focus is on the methodology and not on the completion itself.
 * Visual Studio Community 2019
 * NUnit
 * NSubstitute
+
+
+## The ExplorerTree Component (ETC)
+
+The ETC is implemented in the ExplorerTree.dll.  
+It is also possible to include only the ExplorerTree-Component in a project,  
+to create your own dialogs to load files and folders.  
+For this purpose this component provides an Application-Programming-Interface (API).  
+The API allows an dynamic configuration of the explorer tree during runtime.  
+For example the icon and text size can be configured. 
+
 
 
 
