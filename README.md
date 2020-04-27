@@ -50,10 +50,10 @@ The API allows an dynamic configuration of the explorer tree during runtime.
 For example the icon and text size can be configured. 
 
 
-## 4.1. API description
+### 4.1. API description
 * coming soon
 
-## 4.2. Architecture
+### 4.2. Architecture
 * coming soon
 
 
