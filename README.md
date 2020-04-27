@@ -19,7 +19,8 @@ FoBOFD means: FolderBrowser-OpenFile-Dialog
 [4. The ExplorerTree Component (ETC)](#4-the-explorertree-component)  
 &nbsp;&nbsp;&nbsp;&nbsp;[4.1. API description](#41-api-description)  
 &nbsp;&nbsp;&nbsp;&nbsp;[4.2. Architecture](#42-architecture)  
-[5. Technology stack](#3-technology-stack)  
+[5. MultiselectTreeView](#5-multiselecttreeview)  
+[6. Technology stack](#6-technology-stack)  
 
 ## 1. Personal Goals 
 
@@ -56,8 +57,14 @@ For example the icon and text size can be configured.
 ### 4.2. Architecture
 * coming soon
 
+## 5. MultiselectTreeView 
+MultiselectTreeView is a project of third parties.  
+But it has not been developed further for a long time.  
+Furthermore it is buggy and in my opinion not sufficiently tested.  
+Therefore I integrated it directly into the codebase and not via Nuget.  
+This project should be refactored and sufficiently tested.
 
-## 5. Technology stack
+## 6. Technology stack
 * C# (.Net Framework 4.7.2)
 * Windows Presentation Foundation (WPF)
 * Visual Studio Community 2019
