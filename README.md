@@ -12,6 +12,7 @@ FoBOFD means: FolderBrowser-OpenFile-Dialog
 
 
 ##The ExplorerTree Component (ETC)
+
 The ETC is implemented in the ExplorerTree.dll.  
 It is also possible to include only the ExplorerTree-Component in a project,  
 to create your own dialogs to load files and folders.  
@@ -20,6 +21,9 @@ The API allows an dynamic configuration of the explorer tree during runtime.
 For example the icon and text size can be configured. 
 
 ## Personal Goals 
+
+The personal goals are the main reason why i started this project.  
+Thus the focus is on the methodology and not on the completion itself.
 
 * Improve my software development skills - not only coding ;) 
 * Improve and learn more about Test Driven Development (TDD)
