@@ -15,8 +15,11 @@ FoBOFD means: FolderBrowser-OpenFile-Dialog
 ## Table of contents
 [1. Personal Goals](#1-personal-goals)  
 [2. Goals and Requirements](#2-goals-and-requirements)  
-[3. Technology stack](#3-technology-stack)  
-[4. The ExplorerTree Component (ETC)](#4-the-explorertree-component)
+[3. Architecture](#3-architecture)  
+[4. The ExplorerTree Component (ETC)](#4-the-explorertree-component)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.1. API description](#41-api-description)  
+&nbsp;&nbsp;&nbsp;&nbsp;[4.2. Architecture](#42-architecture)  
+[5. Technology stack](#3-technology-stack)  
 
 ## 1. Personal Goals 
 
@@ -32,12 +35,9 @@ Thus the focus is on the methodology and not on the completion itself.
 * The ETC shall be able to display all available file system elements of the operating system.	
 * The ETC shall provide the programmer with the ability to configure the ETC during runtime.
 
-## 3. Technology stack
-* C# (.Net Framework 4.7.2)
-* Windows Presentation Foundation (WPF)
-* Visual Studio Community 2019
-* NUnit
-* NSubstitute
+## 3. Architecture
+* coming soon
+ 
 
 
 ## 4. The ExplorerTree Component 
@@ -50,5 +50,16 @@ The API allows an dynamic configuration of the explorer tree during runtime.
 For example the icon and text size can be configured. 
 
 
+## 4.1. API description
+* coming soon
+
+## 4.2. Architecture
+* coming soon
 
 
+## 5. Technology stack
+* C# (.Net Framework 4.7.2)
+* Windows Presentation Foundation (WPF)
+* Visual Studio Community 2019
+* NUnit
+* NSubstitute
