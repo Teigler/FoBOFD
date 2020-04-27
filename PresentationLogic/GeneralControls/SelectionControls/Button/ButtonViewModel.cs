@@ -1,5 +1,4 @@
 ﻿using ExplorerTree.Utils;
-using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

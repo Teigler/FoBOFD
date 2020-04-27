@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JetBrains.Build.Platform.Tasks.ThemedIconsPacker</name>
+    </assembly>
+    <members>
+        <member name="T:JetBrains.Build.Platform.Infra.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of marked element could be <c>null</c> sometimes, so the check for <c>null</c> is necessary before its usage
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Infra.NotNullAttribute">
+            <summary>
+            Indicates that the value of marked element could never be <c>null</c>
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions">
+            <summary>
+            Emulates popular extension methods from Platform for easier code in tasks.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.LogAssertion(Microsoft.Build.Utilities.TaskLoggingHelper,System.Exception,System.String)">
+            <summary>
+            Adapts the MSBuild logger to our logger interface methods, for ease of sharing the code.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.LogAlgorithmError(Microsoft.Build.Utilities.TaskLoggingHelper,System.Exception,System.String)">
+            <summary>
+            Adapts the MSBuild logger to our logger interface methods, for ease of sharing the code.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.LogOuterDataError(Microsoft.Build.Utilities.TaskLoggingHelper,System.Exception,System.String)">
+            <summary>
+            Adapts the MSBuild logger to our logger interface methods, for ease of sharing the code.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.QuoteIfNeeded(System.String)">
+            <summary>
+            If the string contains spaces, surrounds it with quotes.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.IsEmpty(System.String)">
+            <summary>
+            Checks whether the string is an empty string or a <c>Null</c> reference.
+            </summary>
+            <seealso cref="M:System.String.IsNullOrEmpty(System.String)"/>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.InElement(System.Xml.XmlWriter,System.String,System.Action)">
+            <summary>
+            <see cref="M:System.Xml.XmlWriter.WriteStartElement(System.String)"/> + <see cref="M:System.Xml.XmlWriter.WriteEndElement"/>.
+            Supports special notation for <paramref name="name"/> to also specify the namespace in the form <c>xmlns::localname</c>, eg <c>"urn:shemas-jetbrains-com:all-assemblies-xml::AllAssemblies"</c>.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.Attr``1(``0,System.String,System.Object)">
+            <summary>
+            A fluent version of <see cref="M:System.Xml.XmlWriter.WriteAttributeString(System.String,System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.GetLocalNameFromFullTypeName(System.CodeDom.CodeTypeReference)">
+            <summary>
+            <para>Takes the type local name out of the full name.</para>
+            <para>Accepted formats: generic parameters number denoted with “`” or “&lt;&gt;”, generic parameters recusrively specified inside “&lt;&gt;”, nested classes delimited with “.” or “+”.</para>
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.GetLocalNameFromFullTypeName(System.String)">
+            <summary>
+            <para>Takes the type local name out of the full name.</para>
+            <para>Accepted formats: generic parameters number denoted with “`” or “&lt;&gt;”, generic parameters recusrively specified inside “&lt;&gt;”, nested classes delimited with “.” or “+”.</para>
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.WriterSettings">
+            <summary>
+            Default settings for an XML Writer.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.MakeUpperCamelCaseName(System.String)">
+            <summary>
+            Changes the name from lowerCamelCase or MixedCAMELCase or dashed-words or underscored_words into the UpperCamelCase format.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Infra.Extensions.EnumerateRecursivelyDfs``1(``0,System.Func{``0,System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            Enumerates the tree structure recursively. The tree includes the root element <paramref name="t"/> itself, its children, as gotten from <paramref name="getChildren"/>, and the children of those children, and so on.
+            The walk uses Depth-First Search, does not use additional memory, but puts a strain on the call stack.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter">
+            <summary>
+            Reads the raw data for themed icons, converts it into the production themed icon data, adds to resources, emits compile-time-validated accessors for loading the icons.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.AssemblyName">
+            <summary>
+            The name of the assembly being built. This is a part of the BAML resource name.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.CompileItems">
+            <summary>
+            Pass the initial items in the <c>@(Compile)</c> item group if you would like <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.GeneratedCompile" /> to indicate which generated items are not yet present in this group (to avoid duplicates when adding).
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.GeneratedAll">
+            <summary>
+            Returns the total list of generated items.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.GeneratedCompile">
+            <summary>
+            Returns the list of generated source code items which should be compiled with the @(Compile) group.
+            Sets the %(<see cref="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.MetadataIsYetToAdd">IsYetToAdd</see>) metadata to <c>True</c> if this item (matched by <c>%(FullPath)</c>) is not yet present in the <c>@(Compile)</c> group.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.GeneratedPage">
+            <summary>
+            Returns the list of generated XAML items which should be compiled with the @(Page) group.
+            Sets the %(<see cref="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.MetadataIsYetToAdd">IsYetToAdd</see>) metadata to <c>True</c> if this item (matched by <c>%(FullPath)</c>) is not yet present in the <c>@(Page)</c> group.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.InputAdditionalDirty">
+            <summary>
+            Any additional input items which might affect the dirty state of the output, but don't take part in the build on themselves. Example: project file, task implementation DLL file, etc.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.InputThemedIconPng">
+            <summary>
+            The input items to convert in Themed Icons PNG format.
+            Either of the “Input…” item groups must be nonempty.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.InputThemedIconsV2">
+            <summary>
+            The input items to convert in Themed Icons V2 format.
+            Deprecated.
+            Either of the “Input…” item groups must be nonempty.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.InputThemedIconsXamlV3">
+            <summary>
+            The input items to convert in Themed Icons V3 format.
+            Either of the “Input…” item groups must be nonempty.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Mode">
+            <summary>
+            <see cref="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.BuildMode" /> enum values for the current operation mode.
+            This task determines on its own whether the files are up-to-date.
+            The Rebuild mode is not explicitly defined because it's implemented as Clean+Build in the standard build targets.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.PageItems">
+            <summary>
+            Pass the initial items in the <c>@(Page)</c> item group if you would like <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.GeneratedPage" /> to indicate which generated items are not yet present in this group (to avoid duplicates when adding).
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ProjectDirectory">
+            <summary>
+            The root directory of the project. Needed to calculate the assigned runtime resource name of the XAML we emit — it's the name of the XAML file relatively to the project root.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ProjectNamespace">
+            <summary>
+            The root namespace of the project. Accessor/loader classes will be emitted into a namespace which is based on the root namespace and combines the relative path to the folder with files.
+            </summary>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.SourceFileExtensionWithDot">
+            <summary>
+            The extension for generated source files. Used to compose the file name and to choose the CodeGen.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.TossInputItems">
+            <summary>
+            Makes a single list of all items and tosses them by folders.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ConvertRawIconToXamlIconData.ConsumeNextImageByExpandingMask(System.Collections.Generic.List{System.Windows.Media.Drawing},System.String,System.String,System.String,System.Boolean,System.Windows.Media.DrawingGroup,Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+              <para>Takes the leftmost drawing and expands the mask to cover all of the overlapping drawings (transitively) within the given drawing group.</para>
+              <para>Optionally, expects a shape at the background giving the total size of the drawing.</para>
+            </summary>
+            <returns>Returns what could be extracted, or the dummy rectangle.</returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ConvertRawIconToXamlIconData.FilterDrawingByExpandingMask_FindProtrudingChildren(System.Windows.Media.DrawingGroup,System.Windows.Media.Geometry,System.Func{System.Windows.Media.Drawing,System.Boolean})">
+            <summary>
+            Looks for a child which does not fall within the given bounds. Recurses into drawing groups to find the exact child.
+            </summary>
+            <returns>Only leaf children (drawing groups are recursed into, but not listed — unless all children are OK, but the DrawingGroup is grouping them in such an unfortunate way that they get protruding as a result of the grouping). Each pair's key is the leaf child, and value is the index path to it (top-down).</returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ConvertRawIconToXamlIconData.StripClipMask(System.Windows.Media.DrawingGroup,Microsoft.Build.Utilities.TaskLoggingHelper,System.String,System.String)">
+            <summary>
+            Strip off the clip mask because usually such a mask is an import/export artifact.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.IconsPackAttribute(System.CodeDom.CodeCompileUnit,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames,System.Uri)">
+            <summary>
+            Yields the icon-pack attribute which (thru the parts catalog) advertises the icon pack to the compiled icons support, and instructs what and where from to load.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.Identifiers(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames,System.Uri)">
+            <summary>
+            <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames.IconIdentifiersClass" />.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.ResourceKeys(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames)">
+            <summary>
+            <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames.IconResourceKeysClass" />.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.SingleComponent(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames,System.Uri)">
+            <summary>
+            <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames.SingleComponentClass" />.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.Typeofs(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames,System.Uri,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.IconPackFlags)">
+            <summary>
+            <see cref="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames.IconTypeofsClass" />.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.XmlDocRemarks(System.Xml.XmlWriter,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames,System.String)">
+            <summary>
+            Emits the common remarks section included as help in all accessors.
+            </summary>
+            <param name="writer"></param>
+            <param name="generatedNames"></param>
+            <param name="sSampleIconId"></param>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.XmlnsDefinition(System.CodeDom.CodeCompileUnit,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames)">
+            <summary>
+            To use the icons from XAML, adds an xmlns definition which allows to have type references which do not contain assembly names.
+            </summary>
+            <param name="codefile"></param>
+            <param name="generatedNames"></param>
+        </member>
+        <member name="P:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames.SingleComponentClass">
+            <summary>
+            NOTE: we're now emitting only one component combining all of the responsibilities, because there's a penalty on creating each new component at runtime and generated code doesn't care much if everything is at one piece
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NameNormalizer">
+            <summary>
+            Makes upper-camel-cased names out of any-format IDs.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NameNormalizer.myMapNameToNormalization">
+            <summary>
+            Normalized names cache.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NameNormalizer.myMapNormalizedToOrigins">
+            <summary>
+            If more than one original name leads to the same canonical, we'll see it here and avoid transforming the name.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NameNormalizer.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Inits with the list of expected names, for these we guarantee there will be no conflicts, i.e. we won't collapse two distinct names into the same normalized one.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NameNormalizer.AssertNoConflicts">
+            <summary>
+              <para>If several names map into the same normalized name, throws an error.</para>
+              <para>Also checks that no names differ by just case.</para>
+              <para>Fluent.</para>
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NamesOrder">
+            <summary>
+            Allows to toss dictionary entries randomly.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NamesOrder.RawIdsDisplayOrder">
+            <summary>
+            Raw IDs (non-normalized names), in the display-sorted order of their normalized form.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.NamesOrder.RawIdsSerializationOrder">
+            <summary>
+            Raw IDs (non-normalized names), in the serialization-sorted order of their normalized form.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.AreInputsNewerThanOutputs(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+            Build-dependency-like check if inputs are dirty with respect to outputs' builddate.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.ConvertAllIcons(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons,Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+            Loads input files, parses&amp;converts, accumulates in the runtime format.
+            </summary>
+            <param name="folder"> </param>
+            <param name="logger"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.ConvertAllIcons_CommonItemMetadata(Microsoft.Build.Framework.ITaskItem,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue@,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue@)">
+            <summary>
+            Handles reading item metadata which is common for items of all the formats.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.ConvertAllIcons_Png(System.String)">
+            <summary>
+            File name pattern: either just a file name for the single themed image (goes to the Default theme, others also use it); or theme name in square brackets, everyting before it is the ID, everything after it is ignored (treated as the extension)
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.ConvertAllIcons_XamlV3(System.String,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem,Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+            Extracts item metadata before calling into
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.GetNamespace(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons,Microsoft.Build.Framework.ITaskItem,System.String)">
+            <summary>
+            Gets the namespace into which the source code classes should be emitted. Is the root namespace of the project, plus relative path to the target folder.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.GetResourcePartUri(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons,Microsoft.Build.Framework.ITaskItem)">
+            <summary>
+            Part URI for loading the app resource from the emitted XAML file.
+            Is the relative path from the XAML file to the project root.
+            </summary>
+            <param name="folder"> </param>
+            <param name="itemProjectDirectory"> </param>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconsToDictionary(System.Collections.Generic.IList{JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ConvertRawIconToXamlIconData.IconImageData},JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.Emitter.GeneratedNames)">
+            <summary>
+            Packs icons into a <see cref="T:System.Windows.ResourceDictionary" /> along with metadata in a specific convention.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.MakePackUri(System.String,System.Uri)">
+            <summary>
+              <para>Wraps the <see cref="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.GetResourcePartUri(JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons,Microsoft.Build.Framework.ITaskItem)" /> into a pack URI which is suitable for loading the BAML resource.</para>
+              <para>Format is $(AssemblyShortName);component/$(RelativePath).</para>
+            </summary>
+            <param name="assname">Assembly name, short form.</param>
+            <param name="uriResourcePart">Resource part relative URI.</param>
+            <returns></returns>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.WriteIconsToXaml(System.Windows.ResourceDictionary,System.String,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons,JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.Outputs,Microsoft.Build.Utilities.TaskLoggingHelper)">
+            <summary>
+            Emits the XAML part of the show.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue">
+            <summary>
+            Value of a boolean metadata collected from task items.
+            Assuming False is the default, to get the actual value: coerce this integer to a boolean and invert it (that's how the integer values of this enum are laid out).
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue.SetToTrue">
+            <summary>
+            True value of metadata.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue.SetToFalse">
+            <summary>
+            False value of metadata.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue.NotSet">
+            <summary>
+            There's no explicitly assigned metadata value.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.BooleanMetadataValue.NoItemsYet">
+            <summary>
+            Haven't yet seen any items.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons.AdditionalDirtyItems">
+            <summary>
+            Any additional input items which might affect the dirty state of the output, but don't take part in the build on themselves. Example: project file, task implementation DLL file, etc.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.FolderWithIcons.Identifier">
+            <summary>
+            The ID of the folder, and of the pack of the items it represents. Gets into the class/file names.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem">
+            <summary>
+            Collect items from all input collections, annotating with their format.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem.GetLogicalFullPath">
+            <summary>
+            Gets the full path of the item from its logical point of view in the project.
+            I.e. if the item were linked into the project from some other physical location — gets its linkage path under the project rather than the path to the linked physical file.
+            </summary>
+        </member>
+        <member name="M:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem.GetPhysicalFullPath">
+            <summary>
+            Path to the icon input file on disk.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem.ItemFormat.XamlV2">
+            <summary>
+            A pack of icon images, two images per icon, IDs are in dictionary keys.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem.ItemFormat.XamlV3">
+            <summary>
+            A pack of icon images, theme names and number of theme images specified in metadata, IDs are in dictionary keys.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.IconInputTaskItem.ItemFormat.PngV1">
+            <summary>
+            Scattered per-theme images, IDs are in file names.
+            </summary>
+        </member>
+        <member name="T:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.Outputs">
+            <summary>
+            Full paths to output items, by category.
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.XamlV3Metadata.ThemeColumns">
+            <summary>
+              <para>Semicolon-separated list. Must have at least one items.</para>
+              <para>Defines how many per-theme images there are in the single icon resource (aligned horizontally), and to which theme aspects they should be assigned.</para>
+              <para>To split out the images, the leftmost set of transitively overlapping elements is taken as the first column, then the second one, and so on. To ensure image size is detected correctly and icons with disjoint elements within the single image are not broken apart, add a background placeholder element and specify <see cref="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.XamlV3Metadata.RemoveBackgroundElement" />.</para>
+              <para>Example:</para>
+              <code>Color</code>
+              <para>Means that each resource in the XAML dictionary is exactly one icon image (all of the drawing elements go to the single icon image), and it's assigned to the “Color” theme.</para>
+              <hr />
+              <code>Gray;Color</code>
+              <para>Means that each resource holds a drawing that combines two images for the icon. One on the left edge is for the “Gray” theme and the other on the right edge is for the “Color” theme.</para>
+            </summary>
+        </member>
+        <member name="F:JetBrains.Build.Platform.Tasks.ThemedIconsPacker.Tasks.ThemedIconsConverter.ExecuteTaskOnFolderWithIcons.XamlV3Metadata.RemoveBackgroundElement">
+            <summary>
+            Boolean.
+            After theme images for the icon are extracted from the resource, defines whether the back-most drawing element should be removed from the final image. Such an element is required to determine icon size (if icon drawing does not occupy the whole icon allowed space), and to help with splitting icon images belonging to different themes, because overlapping elements are transitively collected as the single theme image, and if the image has disjoint elements in it it might not be detected correctly.
+            </summary>
+        </member>
+    </members>
+</doc>

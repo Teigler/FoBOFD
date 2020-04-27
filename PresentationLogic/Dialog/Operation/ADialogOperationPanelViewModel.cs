@@ -1,5 +1,4 @@
 ﻿using ExplorerTree.Utils;
-using JetBrains.ReSharper.Daemon.CSharp.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

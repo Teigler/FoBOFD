@@ -4,7 +4,6 @@ using FoBOFD.PresentationLogic.Dialog.FileSystem.Directory;
 using FoBOFD.PresentationLogic.Dialog.FileSystem.DirectoryFile;
 using FoBOFD.PresentationLogic.Dialog.FileSystem.File;
 using FoBOFD.PresentationLogic.GeneralControls.SelectionControls.Button;
-using JetBrains.ReSharper.Daemon.CSharp.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
