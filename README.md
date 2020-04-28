@@ -37,7 +37,11 @@ Thus the focus is on the methodology and not on the completion itself.
 * The ETC shall provide the programmer with the ability to configure the ETC during runtime.
 
 ## 3. Architecture
-* coming soon  
+
+The architecture of FoBOFD combines a classical layer architecture with the MVVM pattern.  
+FoBOFD itself does not require a data layer and business layer.  
+The subcomponent ExplorerTreeView also combines a classical layer architecture with the MVVM pattern.  
+
 ![Architecture](GitHubResources/Architecture.png)  
 
 
