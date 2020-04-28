@@ -2,7 +2,6 @@
 using ExplorerTree.API.Configuration.IconConfiguration;
 using ExplorerTree.Model.ExplorerTreeItems;
 using ExplorerTree.PresentationLogic.ExplorerTreeItems;
-using JetBrains.UI.Icons;
 using NSubstitute;
 using NUnit.Framework;
 using System;
