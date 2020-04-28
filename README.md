@@ -37,8 +37,9 @@ Thus the focus is on the methodology and not on the completion itself.
 * The ETC shall provide the programmer with the ability to configure the ETC during runtime.
 
 ## 3. Architecture
-* coming soon
- 
+* coming soon  
+![Architecture](GitHubResources/Architecture.png)  
+
 
 
 ## 4. The ExplorerTree Component 
