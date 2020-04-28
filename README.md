@@ -63,7 +63,7 @@ For example the icon and text size can be configured.
 * coming soon
 
 ## 5. MultiselectTreeView 
-MultiselectTreeView is a third party a project.  
+MultiselectTreeView is a third party project.  
 But it has not been developed further for a long time.  
 Furthermore it is buggy and in my opinion not sufficiently tested.  
 Therefore I integrated it directly into the codebase and not via Nuget.  
